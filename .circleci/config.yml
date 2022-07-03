@@ -174,16 +174,15 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             backend_public_ip=$(aws ec2 describe-instances \
+            --filters "Name=tag:badr3,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:badr3,Values=backend-bf0afe7" \
             --output text)
             echo $backend_public_ip >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
-            - project3/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+            - project/.circleci/ansible/inventory.txt    
 
 #   configure-infrastructure:
 #     docker:
