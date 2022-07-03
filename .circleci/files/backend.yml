@@ -28,7 +28,7 @@ Resources:
       InstanceType: t2.micro
       SecurityGroups:
         - Ref: InstanceSecurityGroup
-      KeyName: udacity
+      KeyName: badr-key
       ImageId: ami-0888c389af05d881a 
       Tags:
         - Key: Name
