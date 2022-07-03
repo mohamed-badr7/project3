@@ -150,6 +150,7 @@ jobs:
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
+    steps: 
       - checkout 
       - run:
           name: Ensure back-end infrastructure exists
