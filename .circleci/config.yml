@@ -204,8 +204,8 @@ jobs:
      - attach_workspace:
        at: ~/
      - run:
-       name: Configure Server
-       command:
+        name: Configure Server
+        command:
          cd .circleci/ansible
          cat inventory.txt
          ansible-playbook -i inventory.txt configure-server.yml
