@@ -157,6 +157,7 @@ jobs:
       - image: amazon/aws-cli
     steps: 
       - checkout 
+      - install_awscli
       - run:
           name: Install tar utility
           command: |
@@ -200,6 +201,7 @@ jobs:
 
     steps:
      - checkout
+     - install_awscli
      - add_ssh_keys:
         fingerprints: ["4c:ca:7f:26:fe:6e:ee:31:5d:b6:98:4d:af:d8:c7:f4"]
      - attach_workspace:
@@ -218,22 +220,27 @@ jobs:
 
     #  - destroy-environment      
 
-#   run-migrations:
-#     docker:
-#       # Docker image here that supports NodeJS
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Run migrations
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Send migration results to memstash
-#           command: |
-#             # Your code here
-#             exit 1
-#      # Here's where you will add some code to rollback on failure      
+  run-migrations:
+    docker:
+      - image: cimg/node:13.8.0
+    steps:
+      - checkout
+      - install_awscli
+      - run:
+          name: Run migrations
+          command: |
+             cd backend
+             npm install 
+             npm run migrations > migrations_dump.txt 
+      - run:
+          name: Send migration results to kvdb.io
+          command: |
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then
+            curl https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
+            fi
+      # - destroy-environment
+      # - revert-migrations   
 
 #   deploy-frontend:
 #     docker:
@@ -351,8 +358,8 @@ workflows:
               only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
