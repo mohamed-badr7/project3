@@ -234,12 +234,12 @@ jobs:
       - image: cimg/node:13.8.0
     steps:
       - checkout
+      - install_nodejs
       - run:
           name: Run migrations
           command: |
              cd backend
              npm install
-             npm install nodejs
              npm audit fix --force --audit-level=critical
              npm run migrations > migrations_dump.txt 
       - run:
