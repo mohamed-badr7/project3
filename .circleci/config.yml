@@ -31,38 +31,38 @@ commands:
               
 
               
-    destroy-environment:
-      description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-      parameters:
-        WORKFLOW_ID:
-         type: string
-      steps:
-        - run:
-           name: Destroy environments
-           when: on_fail
-           command: |
-             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.WORKFLOW_ID >>
-             aws s3 rm s3://udapeople-<<parameters.WORKFLOW_ID >> --recursive
-             aws cloudformation delete-stack --stack-name udapeople-frontend-<«<parameters.WORKFLOW_ID >>
+    # destroy-environment:
+    #   description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    #   parameters:
+    #     WORKFLOW_ID:
+    #      type: string
+    #   steps:
+    #     - run:
+    #        name: Destroy environments
+    #        when: on_fail
+    #        command: |
+    #          aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.WORKFLOW_ID >>
+    #          aws s3 rm s3://udapeople-<<parameters.WORKFLOW_ID >> --recursive
+    #          aws cloudformation delete-stack --stack-name udapeople-frontend-<«<parameters.WORKFLOW_ID >>
 
-    revert-migrations:
-     description: Revert the last migration
-     parameters:
-       Workflow_ID:
-        type: string  
-     steps:
-      - run:
-          name: Revert migrations
-          when: on_fail
-          command: |
-            SUCCESS=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
-            # Logic for reverting the database state
-            if(( $SUCCESS==1 )); 
-            then
-              cd ~/project/backend
-              npm install
-              npm run migration:revert
-             fi
+    # revert-migrations:
+    #  description: Revert the last migration
+    #  parameters:
+    #    Workflow_ID:
+    #     type: string  
+    #  steps:
+    #   - run:
+    #       name: Revert migrations
+    #       when: on_fail
+    #       command: |
+    #         SUCCESS=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
+    #         # Logic for reverting the database state
+    #         if(( $SUCCESS==1 )); 
+    #         then
+    #           cd ~/project/backend
+    #           npm install
+    #           npm run migration:revert
+    #          fi
             
 jobs:
   build-frontend:
@@ -200,8 +200,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt   
-      - destroy-environment:
-          WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #     WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
   configure-infrastructure:
@@ -225,8 +225,8 @@ jobs:
          cd .circleci/ansible
          cat inventory.txt
          ansible-playbook -i inventory.txt configure-server.yml
-     - destroy-environment:
-        WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+    #  - destroy-environment:
+    #     WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
     
 
   run-migrations:
@@ -250,10 +250,10 @@ jobs:
             then
             curl https://kvdb.io/4j8TUDzuquJrNddAZ31MTD/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
-      - destroy-environment:
-         WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations: 
-         Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #    WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - revert-migrations: 
+      #    Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
 
