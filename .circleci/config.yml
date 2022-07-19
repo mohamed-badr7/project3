@@ -293,7 +293,6 @@ jobs:
          WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations: 
          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
-
            
                     
 #   deploy-backend:
