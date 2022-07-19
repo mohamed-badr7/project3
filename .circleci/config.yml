@@ -260,11 +260,10 @@ jobs:
 
   deploy-frontend:
     docker:
-     - image: cimg/base:stable
+     - image: amazon/aws-cli
     steps:
       - checkout
       - install_nodejs
-      - install_awscli
       - restore_cache:
          keys: [frontend-deps]
       - run:
