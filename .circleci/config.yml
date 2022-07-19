@@ -165,7 +165,6 @@ jobs:
       - image: amazon/aws-cli
     steps: 
       - checkout 
-      - install_awscli
       - run:
           name: Install tar utility
           command: |
@@ -211,7 +210,6 @@ jobs:
 
     steps:
      - checkout
-     - install_awscli
      - add_ssh_keys:
         fingerprints: ["4c:ca:7f:26:fe:6e:ee:31:5d:b6:98:4d:af:d8:c7:f4"]
      - attach_workspace:
@@ -237,7 +235,6 @@ jobs:
     steps:
       - checkout
       - install_nodejs
-      - install_awscli
       - run:
           name: Run migrations
           command: |
@@ -265,7 +262,6 @@ jobs:
      - image: cimg/base:stable
     steps:
       - checkout
-      - install_awscli
       - install_nodejs
       - restore_cache:
          keys: [frontend-deps]
