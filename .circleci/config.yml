@@ -296,22 +296,41 @@ jobs:
          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
            
                     
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  deploy-backend:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - install_awscli
+      - install_ansible
+      - install_nodejs
+      - add_ssh_keys:
+          fingerprints: [4c:ca:7f:26:fe:6e:ee:31:5d:b6:98:4d:af:d8:c7:f4]
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+         keys: [backend-deps]
+      - run:
+          name: Install dependencies
+          command: |
+            cd backend
+            npm install
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo ".circleci/ansible/inventory.txt"
+            cat .circleci/ansible/inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      - destroy-environment:
+         WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations: 
+         Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 #   smoke-test:
 #     docker:
