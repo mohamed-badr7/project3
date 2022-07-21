@@ -167,10 +167,6 @@ jobs:
       - checkout 
       - install_awscli
       - run:
-          name: Install tar utility
-          command: |
-            yum install -y tar gzip
-      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
@@ -373,10 +369,10 @@ jobs:
             else
               exit 2
             fi
-      # - destroy-environment:
-      #    WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations: 
-      #    Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+         WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations: 
+         Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
 #   cloudfront-update:
