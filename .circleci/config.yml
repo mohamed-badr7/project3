@@ -190,11 +190,11 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            (aws ec2 describe-instances \
+            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
              --filters "Name=tag:name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
              --query 'Reservations[*].Instances[*].PublicIpAddress' \
              --output text)
-            echo "[all]" >> .circleci/ansible/inventory.txt
+            echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
@@ -372,10 +372,10 @@ jobs:
             else
               exit 2
             fi
-      - destroy-environment:
-         WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations: 
-         Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - destroy-environment:
+      #    WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - revert-migrations: 
+      #    Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
 #   cloudfront-update:
