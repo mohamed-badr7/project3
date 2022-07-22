@@ -7,7 +7,7 @@
 - name: "Unarchive backend files"
   unarchive:
    sc: artifact.tar.gz
-   src: ~/backend-app
+   dest: ~/backend-app
    
 - name: "Installing Node Dependencies"
   shell: |
