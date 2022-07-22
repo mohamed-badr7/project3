@@ -340,9 +340,9 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
+            aws ec2 describe-instances \
              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-             --output text)
+             --output text
 
             export API_URL=http://${BACKEND_PUBLIC_IP}:3030
             if curl -s $API_URL/api/status | grep "ok"
