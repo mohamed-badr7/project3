@@ -10,9 +10,11 @@
    dest: ~/backend-app
    
 - name: "Installing Node Dependencies"
-  shell: |
-   cd ~/backend-app
-   sudo npm install -g npm
+  become: true
+  apt:
+     name: npm
+     state: latest
+     update_cache: true
 
 
 - name: "Executing Node app with PM2"
@@ -20,7 +22,6 @@
    cd ~/backend-app/dist
    pm2 stop default
    pm2 start -f main.js
-   pm2 log
 
   register: execute_node
 
