@@ -16,12 +16,6 @@
      state: latest
      update_cache: true
 
-- name: "Create .env"
-  become: true
-  shell: |
-      cd  /home/ubuntu/backend-app
-      cp .env.prod .env
-
 
 - name: "Executing Node app with PM2"
   become: true 
