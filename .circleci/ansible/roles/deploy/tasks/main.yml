@@ -17,11 +17,18 @@
      update_cache: true
 
 
-- name: "Executing Node app with PM2"
+- name: "execute pm2"
+  remote_user: ubuntu
+  become: true
+  become_method: sudo
+  become_user: root
   shell: |
-   cd ~/backend-app/dist
-   pm2 stop default
-   pm2 start -f main.js
+      cd ~/backend-app/dist
+      sudo npm install --force
+      sudo npm run build
+      sudo pm2 stop default
+      sudo pm2 start npm -- start
+      sudo pm2 save
 
   register: execute_node
 
