@@ -11,11 +11,8 @@
    
 - name: "Installing Node Dependencies"
   become: true
-  apt:
-     name: npm
-     state: latest
-     update_cache: true
-
+  shell: |
+     Npm install pm2@latest -g
 
 - name: "Executing Node app with PM2"
   become: true 
