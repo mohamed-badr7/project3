@@ -14,7 +14,6 @@
   apt:
      name: npm
      state: latest
-     update_cache: true
 
 - name: "Executing Node app with PM2"
   become: true 
