@@ -11,9 +11,10 @@
    
 - name: "Installing Node Dependencies"
   become: true
-  shell: |
-   cd ~/backend-app
-   Npm install pm2@latest -g
+  apt:
+     name: npm
+     state: latest
+     update_cache: true
 
 - name: "Executing Node app with PM2"
   become: true 
