@@ -187,10 +187,10 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-           BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-            --filters "Name=tag:Name,values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text >> .circleci/ansible/inventory.txt)
+           BACKEND PUBLIC_IP=$(aws ec2 describe-instances \
+           -- filters "Name=tag:Name,Values-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+           --query 'Reservations [*].Instances [*].PublicIpAddress' \
+           --output text >> .circleci/ansible/inventory.txt)
            echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
@@ -267,9 +267,9 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-            --filters "Name=tag:Name,values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            BACKEND PUBLIC_IP=$(aws ec2 describe-instances \
+            -- filters "Name=tag:Name,Values-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --query 'Reservations [*].Instances [*].PublicIpAddress' \
             --output text >> .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_PUBLIC_IP}:3030"
             echo "API_URL = ${API_URL}"
@@ -344,9 +344,9 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-            --filters "Name=tag:Name,values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            BACKEND PUBLIC_IP=$(aws ec2 describe-instances \
+            -- filters "Name=tag:Name,Values-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --query 'Reservations [*].Instances [*].PublicIpAddress' \
             --output text >> .circleci/ansible/inventory.txt)
 
             export API_URL=http://${BACKEND_PUBLIC_IP}:3030
