@@ -415,10 +415,11 @@ jobs:
               --query "StackSummaries [*].StackName" \
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
+
             export OldWorkflowID=$(curl --insecure https://kvdb.io/${KVDB_BUCKET}/old_workflow_id)
             echo Old Workflow ID: $01dWorkflowID
 
-            if [[ "${STACKS[@]}" "${01dworkflowID}" ]]
+            if [[ "${STACKS[@]}" =~ "${01dworkflowID}" ]]
             then
               aws s3 rm "s3://udapeople-${01dworkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-backend-${01dWorkflowID}"
