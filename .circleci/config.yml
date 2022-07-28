@@ -401,7 +401,7 @@ jobs:
          Workflow_ID: ${CIRCLE_WORKFLOW_ID:0:7}
 
 
-  cleanup:
+  cleanup: 
     docker:
       - image: cimg/base:stable 
     steps:
